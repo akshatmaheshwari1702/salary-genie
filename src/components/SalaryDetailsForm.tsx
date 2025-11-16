@@ -7,10 +7,14 @@ interface SalaryDetailsFormProps {
   setBasicSalary: (value: string) => void;
   hra: string;
   setHra: (value: string) => void;
-  otherAllowances: string;
-  setOtherAllowances: (value: string) => void;
-  deductions: string;
-  setDeductions: (value: string) => void;
+  specialAllowance: string;
+  setSpecialAllowance: (value: string) => void;
+  tds: string;
+  setTds: (value: string) => void;
+  professionalTax: string;
+  setProfessionalTax: (value: string) => void;
+  providentFund: string;
+  setProvidentFund: (value: string) => void;
 }
 
 export const SalaryDetailsForm = ({
@@ -18,21 +22,33 @@ export const SalaryDetailsForm = ({
   setBasicSalary,
   hra,
   setHra,
-  otherAllowances,
-  setOtherAllowances,
-  deductions,
-  setDeductions,
+  specialAllowance,
+  setSpecialAllowance,
+  tds,
+  setTds,
+  professionalTax,
+  setProfessionalTax,
+  providentFund,
+  setProvidentFund,
 }: SalaryDetailsFormProps) => {
-  const calculateGross = () => {
+  const calculateGrossEarning = () => {
     return (
       Number(basicSalary || 0) +
       Number(hra || 0) +
-      Number(otherAllowances || 0)
+      Number(specialAllowance || 0)
     );
   };
 
-  const calculateNet = () => {
-    return calculateGross() - Number(deductions || 0);
+  const calculateTotalDeductions = () => {
+    return (
+      Number(tds || 0) +
+      Number(professionalTax || 0) +
+      Number(providentFund || 0)
+    );
+  };
+
+  const calculateNetPay = () => {
+    return calculateGrossEarning() - calculateTotalDeductions();
   };
 
   return (
@@ -40,55 +56,87 @@ export const SalaryDetailsForm = ({
       <CardHeader>
         <CardTitle>Salary Details</CardTitle>
       </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="space-y-2">
-          <Label htmlFor="basicSalary">Basic Salary</Label>
-          <Input
-            id="basicSalary"
-            type="number"
-            value={basicSalary}
-            onChange={(e) => setBasicSalary(e.target.value)}
-            placeholder="Enter basic salary"
-          />
+      <CardContent className="space-y-6">
+        <div className="space-y-4">
+          <h3 className="font-semibold text-sm">Earnings</h3>
+          <div className="space-y-2">
+            <Label htmlFor="basicSalary">Basic Salary</Label>
+            <Input
+              id="basicSalary"
+              type="number"
+              value={basicSalary}
+              onChange={(e) => setBasicSalary(e.target.value)}
+              placeholder="Enter basic salary"
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="hra">HRA</Label>
+            <Input
+              id="hra"
+              type="number"
+              value={hra}
+              onChange={(e) => setHra(e.target.value)}
+              placeholder="Enter HRA"
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="specialAllowance">Special Allowance</Label>
+            <Input
+              id="specialAllowance"
+              type="number"
+              value={specialAllowance}
+              onChange={(e) => setSpecialAllowance(e.target.value)}
+              placeholder="Enter special allowance"
+            />
+          </div>
         </div>
-        <div className="space-y-2">
-          <Label htmlFor="hra">HRA</Label>
-          <Input
-            id="hra"
-            type="number"
-            value={hra}
-            onChange={(e) => setHra(e.target.value)}
-            placeholder="Enter HRA"
-          />
+
+        <div className="space-y-4">
+          <h3 className="font-semibold text-sm">Deductions</h3>
+          <div className="space-y-2">
+            <Label htmlFor="tds">Tax Deducted at Source (TDS)</Label>
+            <Input
+              id="tds"
+              type="number"
+              value={tds}
+              onChange={(e) => setTds(e.target.value)}
+              placeholder="Enter TDS"
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="professionalTax">Professional Tax</Label>
+            <Input
+              id="professionalTax"
+              type="number"
+              value={professionalTax}
+              onChange={(e) => setProfessionalTax(e.target.value)}
+              placeholder="Enter professional tax"
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="providentFund">Provident Fund (Employee)</Label>
+            <Input
+              id="providentFund"
+              type="number"
+              value={providentFund}
+              onChange={(e) => setProvidentFund(e.target.value)}
+              placeholder="Enter PF"
+            />
+          </div>
         </div>
-        <div className="space-y-2">
-          <Label htmlFor="otherAllowances">Other Allowances</Label>
-          <Input
-            id="otherAllowances"
-            type="number"
-            value={otherAllowances}
-            onChange={(e) => setOtherAllowances(e.target.value)}
-            placeholder="Enter other allowances"
-          />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="deductions">Total Deductions</Label>
-          <Input
-            id="deductions"
-            type="number"
-            value={deductions}
-            onChange={(e) => setDeductions(e.target.value)}
-            placeholder="Enter deductions"
-          />
-        </div>
+
         <div className="pt-4 border-t space-y-2">
           <div className="flex justify-between text-sm">
-            <span className="font-medium">Gross Salary:</span>
-            <span>₹{calculateGross().toLocaleString()}</span>
+            <span className="font-medium">Gross Earning:</span>
+            <span>₹{calculateGrossEarning().toLocaleString()}</span>
+          </div>
+          <div className="flex justify-between text-sm">
+            <span className="font-medium">Total Deductions:</span>
+            <span>₹{calculateTotalDeductions().toLocaleString()}</span>
           </div>
           <div className="flex justify-between text-base font-semibold text-primary">
-            <span>Net Salary:</span>
-            <span>₹{calculateNet().toLocaleString()}</span>
+            <span>Net Pay:</span>
+            <span>₹{calculateNetPay().toLocaleString()}</span>
           </div>
         </div>
       </CardContent>

@@ -1,19 +1,30 @@
-import { Card, CardContent } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
+import { convertNumberToWords } from "@/utils/numberToWords";
 
 interface SalarySlipPreviewProps {
   companyName: string;
   companyAddress: string;
   logo: string;
   employeeName: string;
-  employeeId: string;
+  employeeCode: string;
+  employeeType: string;
   designation: string;
-  department: string;
+  dateOfJoining: string;
+  baseLocation: string;
+  state: string;
+  panNo: string;
+  bankName: string;
+  accountNo: string;
+  ifscCode: string;
+  branchName: string;
   month: string;
   year: string;
   basicSalary: string;
   hra: string;
-  otherAllowances: string;
-  deductions: string;
+  specialAllowance: string;
+  tds: string;
+  professionalTax: string;
+  providentFund: string;
 }
 
 export const SalarySlipPreview = ({
@@ -21,121 +32,216 @@ export const SalarySlipPreview = ({
   companyAddress,
   logo,
   employeeName,
-  employeeId,
+  employeeCode,
+  employeeType,
   designation,
-  department,
+  dateOfJoining,
+  baseLocation,
+  state,
+  panNo,
+  bankName,
+  accountNo,
+  ifscCode,
+  branchName,
   month,
   year,
   basicSalary,
   hra,
-  otherAllowances,
-  deductions,
+  specialAllowance,
+  tds,
+  professionalTax,
+  providentFund,
 }: SalarySlipPreviewProps) => {
-  const calculateGross = () => {
+  const calculateGrossEarning = () => {
     return (
       Number(basicSalary || 0) +
       Number(hra || 0) +
-      Number(otherAllowances || 0)
+      Number(specialAllowance || 0)
     );
   };
 
-  const calculateNet = () => {
-    return calculateGross() - Number(deductions || 0);
+  const calculateTotalDeductions = () => {
+    return (
+      Number(tds || 0) +
+      Number(professionalTax || 0) +
+      Number(providentFund || 0)
+    );
+  };
+
+  const calculateNetPay = () => {
+    return calculateGrossEarning() - calculateTotalDeductions();
   };
 
   return (
-    <Card className="w-full max-w-3xl mx-auto" id="salary-slip">
-      <CardContent className="p-8">
+    <Card className="w-full max-w-4xl mx-auto overflow-hidden" id="salary-slip">
+      <div className="bg-white text-black">
         {/* Header */}
-        <div className="flex items-center justify-between border-b-2 border-border pb-4 mb-6">
-          <div className="flex-1">
-            <h1 className="text-2xl font-bold text-foreground">{companyName || "Company Name"}</h1>
-            <p className="text-sm text-muted-foreground">{companyAddress || "Company Address"}</p>
+        <div className="grid grid-cols-[200px_1fr] border-2 border-black">
+          <div className="border-r-2 border-black p-4 flex items-center justify-center">
+            {logo ? (
+              <img src={logo} alt="Company Logo" className="max-w-full max-h-32 object-contain" />
+            ) : (
+              <div className="w-32 h-32 bg-muted flex items-center justify-center text-xs text-muted-foreground">
+                Logo
+              </div>
+            )}
           </div>
-          {logo && (
-            <div className="w-20 h-20 flex items-center justify-center">
-              <img src={logo} alt="Company Logo" className="max-w-full max-h-full object-contain" />
+          <div className="flex flex-col">
+            <div className="border-b-2 border-black p-3 text-center">
+              <h1 className="text-2xl font-bold text-red-600">{companyName || "Company Name"}</h1>
             </div>
-          )}
+            <div className="border-b-2 border-black p-2 text-center text-sm">
+              <p className="font-semibold">Office Address: {companyAddress || "Company Address"}</p>
+            </div>
+            <div className="p-3 text-center">
+              <h2 className="text-xl font-bold">Salary Slip for {month || "Month"} {year || "Year"}</h2>
+            </div>
+          </div>
         </div>
 
-        {/* Title */}
-        <div className="text-center mb-6">
-          <h2 className="text-xl font-semibold text-foreground">SALARY SLIP</h2>
-          <p className="text-sm text-muted-foreground">
-            For the month of {month || "Month"} {year || "Year"}
-          </p>
+        {/* Employee Details Grid */}
+        <div className="border-x-2 border-b-2 border-black">
+          <div className="grid grid-cols-[1fr_auto_1fr_auto_1fr] border-b-2 border-black">
+            <div className="p-2 border-r-2 border-black">
+              <p className="text-sm font-bold">Employee Name:</p>
+              <p className="text-sm">{employeeName || "Name"}</p>
+            </div>
+            <div className="w-px"></div>
+            <div className="p-2 border-r-2 border-black">
+              <p className="text-sm font-bold">Employee Type:</p>
+              <p className="text-sm">{employeeType || "Type"}</p>
+            </div>
+            <div className="w-px"></div>
+            <div className="p-2">
+              <p className="text-sm font-bold">Employee Code:</p>
+              <p className="text-sm">{employeeCode || "Code"}</p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-[1fr_1fr] border-b-2 border-black">
+            <div className="p-2 border-r-2 border-black">
+              <p className="text-sm font-bold">Designation:</p>
+              <p className="text-sm">{designation || "Designation"}</p>
+            </div>
+            <div className="p-2">
+              <p className="text-sm font-bold">Date of Joining:</p>
+              <p className="text-sm">{dateOfJoining || "DD-MM-YYYY"}</p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-[1fr_auto_1fr_auto_1fr] border-b-2 border-black">
+            <div className="p-2 border-r-2 border-black">
+              <p className="text-sm font-bold">Base Location:</p>
+              <p className="text-sm">{baseLocation || "Location"}</p>
+            </div>
+            <div className="w-px"></div>
+            <div className="p-2 border-r-2 border-black">
+              <p className="text-sm font-bold">State:</p>
+              <p className="text-sm">{state || "State"}</p>
+            </div>
+            <div className="w-px"></div>
+            <div className="p-2">
+              <p className="text-sm font-bold">PAN No:</p>
+              <p className="text-sm">{panNo || "PAN"}</p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-[1fr_auto_1fr_auto_1fr_auto_1fr]">
+            <div className="p-2 border-r-2 border-black">
+              <p className="text-sm font-bold">Bank Name:</p>
+              <p className="text-sm">{bankName || "Bank"}</p>
+            </div>
+            <div className="w-px"></div>
+            <div className="p-2 border-r-2 border-black">
+              <p className="text-sm font-bold">Account No:</p>
+              <p className="text-sm">{accountNo || "Account"}</p>
+            </div>
+            <div className="w-px"></div>
+            <div className="p-2 border-r-2 border-black">
+              <p className="text-sm font-bold">IFSC Code:</p>
+              <p className="text-sm">{ifscCode || "IFSC"}</p>
+            </div>
+            <div className="w-px"></div>
+            <div className="p-2">
+              <p className="text-sm font-bold">Branch Name:</p>
+              <p className="text-sm">{branchName || ""}</p>
+            </div>
+          </div>
         </div>
 
-        {/* Employee Details */}
-        <div className="grid grid-cols-2 gap-4 mb-6 bg-muted/50 p-4 rounded-lg">
+        {/* Earnings and Deductions Table */}
+        <div className="grid grid-cols-2 border-x-2 border-b-2 border-black">
+          {/* Earnings */}
+          <div className="border-r-2 border-black">
+            <div className="bg-gray-100 p-2 border-b-2 border-black text-center">
+              <h3 className="font-bold">Earnings</h3>
+            </div>
+            <div className="grid grid-cols-2 border-b-2 border-black">
+              <div className="p-2 border-r-2 border-black text-center font-bold text-sm">Components</div>
+              <div className="p-2 text-center font-bold text-sm">Amount (Rs.)</div>
+            </div>
+            <div className="grid grid-cols-2 border-b-2 border-black">
+              <div className="p-2 border-r-2 border-black text-sm">Basic</div>
+              <div className="p-2 text-right text-sm">{Number(basicSalary || 0).toLocaleString()}</div>
+            </div>
+            <div className="grid grid-cols-2 border-b-2 border-black">
+              <div className="p-2 border-r-2 border-black text-sm">HRA</div>
+              <div className="p-2 text-right text-sm">{Number(hra || 0).toLocaleString()}</div>
+            </div>
+            <div className="grid grid-cols-2 border-b-2 border-black">
+              <div className="p-2 border-r-2 border-black text-sm">Special Allowance</div>
+              <div className="p-2 text-right text-sm">{Number(specialAllowance || 0).toLocaleString()}</div>
+            </div>
+            <div className="grid grid-cols-2 border-b-2 border-black bg-gray-100">
+              <div className="p-2 border-r-2 border-black font-bold text-sm">Gross Earning (A)</div>
+              <div className="p-2 text-right font-bold text-sm">{calculateGrossEarning().toLocaleString()}</div>
+            </div>
+            <div className="grid grid-cols-2 border-b-2 border-black bg-gray-100">
+              <div className="p-2 border-r-2 border-black font-bold text-sm">Net Pay (A - B)</div>
+              <div className="p-2 text-right font-bold text-sm">{calculateNetPay().toLocaleString()}</div>
+            </div>
+            <div className="grid grid-cols-2">
+              <div className="p-2 border-r-2 border-black font-bold text-sm">Total Pay</div>
+              <div className="p-2 text-right font-bold text-sm">{calculateNetPay().toLocaleString()}</div>
+            </div>
+          </div>
+
+          {/* Deductions */}
           <div>
-            <p className="text-sm text-muted-foreground">Employee Name</p>
-            <p className="font-medium">{employeeName || "Name"}</p>
-          </div>
-          <div>
-            <p className="text-sm text-muted-foreground">Employee ID</p>
-            <p className="font-medium">{employeeId || "ID"}</p>
-          </div>
-          <div>
-            <p className="text-sm text-muted-foreground">Designation</p>
-            <p className="font-medium">{designation || "Designation"}</p>
-          </div>
-          <div>
-            <p className="text-sm text-muted-foreground">Department</p>
-            <p className="font-medium">{department || "Department"}</p>
-          </div>
-        </div>
-
-        {/* Salary Details */}
-        <div className="mb-6">
-          <h3 className="font-semibold mb-3 text-foreground">Earnings</h3>
-          <div className="space-y-2">
-            <div className="flex justify-between py-2 border-b border-border">
-              <span className="text-muted-foreground">Basic Salary</span>
-              <span className="font-medium">₹{Number(basicSalary || 0).toLocaleString()}</span>
+            <div className="bg-gray-100 p-2 border-b-2 border-black text-center">
+              <h3 className="font-bold">Deductions</h3>
             </div>
-            <div className="flex justify-between py-2 border-b border-border">
-              <span className="text-muted-foreground">HRA</span>
-              <span className="font-medium">₹{Number(hra || 0).toLocaleString()}</span>
+            <div className="grid grid-cols-2 border-b-2 border-black">
+              <div className="p-2 border-r-2 border-black text-center font-bold text-sm">Common Deductions</div>
+              <div className="p-2 text-center font-bold text-sm">Amount (Rs.)</div>
             </div>
-            <div className="flex justify-between py-2 border-b border-border">
-              <span className="text-muted-foreground">Other Allowances</span>
-              <span className="font-medium">₹{Number(otherAllowances || 0).toLocaleString()}</span>
+            <div className="grid grid-cols-2 border-b-2 border-black">
+              <div className="p-2 border-r-2 border-black text-sm">Tax Deducted at Source (TDS)</div>
+              <div className="p-2 text-right text-sm">{Number(tds || 0).toLocaleString()}</div>
             </div>
-            <div className="flex justify-between py-2 border-b-2 border-border font-semibold">
-              <span>Gross Salary</span>
-              <span>₹{calculateGross().toLocaleString()}</span>
+            <div className="grid grid-cols-2 border-b-2 border-black">
+              <div className="p-2 border-r-2 border-black text-sm">Professional Tax</div>
+              <div className="p-2 text-right text-sm">{Number(professionalTax || 0).toLocaleString()}</div>
             </div>
-          </div>
-        </div>
-
-        {/* Deductions */}
-        <div className="mb-6">
-          <h3 className="font-semibold mb-3 text-foreground">Deductions</h3>
-          <div className="flex justify-between py-2 border-b-2 border-border">
-            <span className="text-muted-foreground">Total Deductions</span>
-            <span className="font-medium">₹{Number(deductions || 0).toLocaleString()}</span>
-          </div>
-        </div>
-
-        {/* Net Salary */}
-        <div className="bg-primary/10 p-4 rounded-lg">
-          <div className="flex justify-between items-center">
-            <span className="text-lg font-bold text-foreground">NET SALARY</span>
-            <span className="text-xl font-bold text-primary">
-              ₹{calculateNet().toLocaleString()}
-            </span>
+            <div className="grid grid-cols-2 border-b-2 border-black">
+              <div className="p-2 border-r-2 border-black text-sm">Provident Fund (Employee)</div>
+              <div className="p-2 text-right text-sm">{Number(providentFund || 0).toLocaleString()}</div>
+            </div>
+            <div className="grid grid-cols-2 border-b-2 border-black bg-gray-100">
+              <div className="p-2 border-r-2 border-black font-bold text-sm">Total Deductions (B)</div>
+              <div className="p-2 text-right font-bold text-sm">{calculateTotalDeductions().toLocaleString()}</div>
+            </div>
+            <div className="p-3 border-b-2 border-black">
+              <p className="text-sm text-center">{convertNumberToWords(calculateNetPay())}</p>
+            </div>
           </div>
         </div>
 
         {/* Footer */}
-        <div className="mt-8 pt-4 border-t border-border text-center">
-          <p className="text-xs text-muted-foreground">
-            This is a computer generated salary slip and does not require signature
-          </p>
+        <div className="border-x-2 border-b-2 border-black border-t-4 border-t-blue-600 p-3 text-center">
+          <p className="text-sm font-semibold">Note: This is a Computer-Generated Slip and does not require signature</p>
         </div>
-      </CardContent>
+      </div>
     </Card>
   );
 };
