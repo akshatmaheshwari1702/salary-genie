@@ -19,17 +19,27 @@ const Index = () => {
 
   // Employee details
   const [employeeName, setEmployeeName] = useState("");
-  const [employeeId, setEmployeeId] = useState("");
+  const [employeeCode, setEmployeeCode] = useState("");
+  const [employeeType, setEmployeeType] = useState("");
   const [designation, setDesignation] = useState("");
-  const [department, setDepartment] = useState("");
+  const [dateOfJoining, setDateOfJoining] = useState("");
+  const [baseLocation, setBaseLocation] = useState("");
+  const [state, setState] = useState("");
+  const [panNo, setPanNo] = useState("");
+  const [bankName, setBankName] = useState("");
+  const [accountNo, setAccountNo] = useState("");
+  const [ifscCode, setIfscCode] = useState("");
+  const [branchName, setBranchName] = useState("");
   const [month, setMonth] = useState("");
   const [year, setYear] = useState("");
 
   // Salary details
   const [basicSalary, setBasicSalary] = useState("");
   const [hra, setHra] = useState("");
-  const [otherAllowances, setOtherAllowances] = useState("");
-  const [deductions, setDeductions] = useState("");
+  const [specialAllowance, setSpecialAllowance] = useState("");
+  const [tds, setTds] = useState("");
+  const [professionalTax, setProfessionalTax] = useState("");
+  const [providentFund, setProvidentFund] = useState("");
 
   const handleGeneratePDF = async () => {
     try {
@@ -39,22 +49,32 @@ const Index = () => {
           companyAddress={companyAddress}
           logo={logo}
           employeeName={employeeName}
-          employeeId={employeeId}
+          employeeCode={employeeCode}
+          employeeType={employeeType}
           designation={designation}
-          department={department}
+          dateOfJoining={dateOfJoining}
+          baseLocation={baseLocation}
+          state={state}
+          panNo={panNo}
+          bankName={bankName}
+          accountNo={accountNo}
+          ifscCode={ifscCode}
+          branchName={branchName}
           month={month}
           year={year}
           basicSalary={basicSalary}
           hra={hra}
-          otherAllowances={otherAllowances}
-          deductions={deductions}
+          specialAllowance={specialAllowance}
+          tds={tds}
+          professionalTax={professionalTax}
+          providentFund={providentFund}
         />
       ).toBlob();
 
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
-      link.download = `salary-slip-${employeeId || "employee"}-${month}-${year}.pdf`;
+      link.download = `salary-slip-${employeeCode || "employee"}-${month}-${year}.pdf`;
       link.click();
       URL.revokeObjectURL(url);
 
@@ -98,12 +118,28 @@ const Index = () => {
             <EmployeeDetailsForm
               employeeName={employeeName}
               setEmployeeName={setEmployeeName}
-              employeeId={employeeId}
-              setEmployeeId={setEmployeeId}
+              employeeCode={employeeCode}
+              setEmployeeCode={setEmployeeCode}
+              employeeType={employeeType}
+              setEmployeeType={setEmployeeType}
               designation={designation}
               setDesignation={setDesignation}
-              department={department}
-              setDepartment={setDepartment}
+              dateOfJoining={dateOfJoining}
+              setDateOfJoining={setDateOfJoining}
+              baseLocation={baseLocation}
+              setBaseLocation={setBaseLocation}
+              state={state}
+              setState={setState}
+              panNo={panNo}
+              setPanNo={setPanNo}
+              bankName={bankName}
+              setBankName={setBankName}
+              accountNo={accountNo}
+              setAccountNo={setAccountNo}
+              ifscCode={ifscCode}
+              setIfscCode={setIfscCode}
+              branchName={branchName}
+              setBranchName={setBranchName}
               month={month}
               setMonth={setMonth}
               year={year}
@@ -115,10 +151,14 @@ const Index = () => {
               setBasicSalary={setBasicSalary}
               hra={hra}
               setHra={setHra}
-              otherAllowances={otherAllowances}
-              setOtherAllowances={setOtherAllowances}
-              deductions={deductions}
-              setDeductions={setDeductions}
+              specialAllowance={specialAllowance}
+              setSpecialAllowance={setSpecialAllowance}
+              tds={tds}
+              setTds={setTds}
+              professionalTax={professionalTax}
+              setProfessionalTax={setProfessionalTax}
+              providentFund={providentFund}
+              setProvidentFund={setProvidentFund}
             />
 
             <Button 
@@ -134,21 +174,33 @@ const Index = () => {
           {/* Preview Section */}
           <div className="lg:sticky lg:top-8 lg:self-start">
             <h2 className="text-xl font-semibold mb-4 text-foreground">Preview</h2>
-            <SalarySlipPreview
-              companyName={companyName}
-              companyAddress={companyAddress}
-              logo={logo}
-              employeeName={employeeName}
-              employeeId={employeeId}
-              designation={designation}
-              department={department}
-              month={month}
-              year={year}
-              basicSalary={basicSalary}
-              hra={hra}
-              otherAllowances={otherAllowances}
-              deductions={deductions}
-            />
+            <div className="overflow-auto">
+              <SalarySlipPreview
+                companyName={companyName}
+                companyAddress={companyAddress}
+                logo={logo}
+                employeeName={employeeName}
+                employeeCode={employeeCode}
+                employeeType={employeeType}
+                designation={designation}
+                dateOfJoining={dateOfJoining}
+                baseLocation={baseLocation}
+                state={state}
+                panNo={panNo}
+                bankName={bankName}
+                accountNo={accountNo}
+                ifscCode={ifscCode}
+                branchName={branchName}
+                month={month}
+                year={year}
+                basicSalary={basicSalary}
+                hra={hra}
+                specialAllowance={specialAllowance}
+                tds={tds}
+                professionalTax={professionalTax}
+                providentFund={providentFund}
+              />
+            </div>
           </div>
         </div>
       </main>

@@ -1,132 +1,185 @@
 import { Document, Page, Text, View, StyleSheet, Image } from "@react-pdf/renderer";
+import { convertNumberToWords } from "@/utils/numberToWords";
 
 const styles = StyleSheet.create({
   page: {
-    padding: 40,
     backgroundColor: "#ffffff",
+    fontFamily: "Helvetica",
+  },
+  border: {
+    border: 2,
+    borderColor: "#000000",
   },
   header: {
     flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 20,
-    paddingBottom: 15,
     borderBottom: 2,
-    borderBottomColor: "#e5e7eb",
+    borderColor: "#000000",
   },
-  companyInfo: {
+  logoSection: {
+    width: 200,
+    borderRight: 2,
+    borderColor: "#000000",
+    padding: 10,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  logo: {
+    width: 120,
+    height: 120,
+  },
+  headerRight: {
     flex: 1,
   },
   companyName: {
+    textAlign: "center",
     fontSize: 20,
     fontWeight: "bold",
-    marginBottom: 5,
+    color: "#DC2626",
+    padding: 10,
+    borderBottom: 2,
+    borderColor: "#000000",
   },
   companyAddress: {
+    textAlign: "center",
     fontSize: 10,
-    color: "#6b7280",
-  },
-  logo: {
-    width: 60,
-    height: 60,
+    fontWeight: "bold",
+    padding: 8,
+    borderBottom: 2,
+    borderColor: "#000000",
   },
   title: {
     textAlign: "center",
-    marginBottom: 20,
-  },
-  titleText: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "bold",
-    marginBottom: 5,
+    padding: 10,
   },
-  subtitle: {
-    fontSize: 11,
-    color: "#6b7280",
-  },
-  employeeDetails: {
-    backgroundColor: "#f9fafb",
-    padding: 15,
-    borderRadius: 5,
-    marginBottom: 20,
+  detailsGrid: {
+    borderBottom: 2,
+    borderColor: "#000000",
   },
   detailRow: {
     flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 10,
+    borderBottom: 2,
+    borderColor: "#000000",
   },
-  detailColumn: {
+  detailRowLast: {
+    flexDirection: "row",
+  },
+  detailCell: {
+    padding: 8,
+    borderRight: 2,
+    borderColor: "#000000",
+    flex: 1,
+  },
+  detailCellLast: {
+    padding: 8,
     flex: 1,
   },
   detailLabel: {
     fontSize: 9,
-    color: "#6b7280",
-    marginBottom: 3,
+    fontWeight: "bold",
   },
   detailValue: {
+    fontSize: 9,
+    marginTop: 2,
+  },
+  tableSection: {
+    flexDirection: "row",
+  },
+  tableColumn: {
+    flex: 1,
+    borderRight: 2,
+    borderColor: "#000000",
+  },
+  tableColumnLast: {
+    flex: 1,
+  },
+  tableHeader: {
+    backgroundColor: "#F3F4F6",
+    padding: 8,
+    borderBottom: 2,
+    borderColor: "#000000",
+    textAlign: "center",
+  },
+  tableHeaderText: {
     fontSize: 11,
     fontWeight: "bold",
   },
-  section: {
-    marginBottom: 20,
+  tableSubHeader: {
+    flexDirection: "row",
+    borderBottom: 2,
+    borderColor: "#000000",
   },
-  sectionTitle: {
-    fontSize: 13,
-    fontWeight: "bold",
-    marginBottom: 10,
+  tableSubHeaderCell: {
+    flex: 1,
+    padding: 8,
+    borderRight: 2,
+    borderColor: "#000000",
+    textAlign: "center",
+  },
+  tableSubHeaderCellLast: {
+    flex: 1,
+    padding: 8,
+    textAlign: "center",
   },
   tableRow: {
     flexDirection: "row",
-    justifyContent: "space-between",
-    paddingVertical: 8,
-    borderBottom: 1,
-    borderBottomColor: "#e5e7eb",
+    borderBottom: 2,
+    borderColor: "#000000",
   },
-  tableLabel: {
-    fontSize: 10,
-    color: "#6b7280",
+  tableRowLast: {
+    flexDirection: "row",
   },
-  tableValue: {
-    fontSize: 10,
-    fontWeight: "bold",
+  tableCell: {
+    flex: 1,
+    padding: 8,
+    borderRight: 2,
+    borderColor: "#000000",
+    fontSize: 9,
+  },
+  tableCellLast: {
+    flex: 1,
+    padding: 8,
+    fontSize: 9,
+    textAlign: "right",
   },
   totalRow: {
+    backgroundColor: "#F3F4F6",
     flexDirection: "row",
-    justifyContent: "space-between",
-    paddingVertical: 8,
     borderBottom: 2,
-    borderBottomColor: "#e5e7eb",
+    borderColor: "#000000",
+  },
+  totalCell: {
+    flex: 1,
+    padding: 8,
+    borderRight: 2,
+    borderColor: "#000000",
+    fontSize: 9,
     fontWeight: "bold",
   },
-  netSalaryBox: {
-    backgroundColor: "#dbeafe",
-    padding: 15,
-    borderRadius: 5,
-    marginTop: 20,
-  },
-  netSalaryRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  netSalaryLabel: {
-    fontSize: 14,
+  totalCellLast: {
+    flex: 1,
+    padding: 8,
+    fontSize: 9,
     fontWeight: "bold",
+    textAlign: "right",
   },
-  netSalaryValue: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "#3b82f6",
+  wordsCell: {
+    padding: 10,
+    fontSize: 9,
+    textAlign: "center",
+    borderBottom: 2,
+    borderColor: "#000000",
   },
   footer: {
-    marginTop: 30,
-    paddingTop: 15,
-    borderTop: 1,
-    borderTopColor: "#e5e7eb",
+    borderTop: 4,
+    borderTopColor: "#2563EB",
+    padding: 10,
     textAlign: "center",
   },
   footerText: {
-    fontSize: 8,
-    color: "#6b7280",
+    fontSize: 9,
+    fontWeight: "bold",
   },
 });
 
@@ -135,15 +188,25 @@ interface SalarySlipPDFProps {
   companyAddress: string;
   logo: string;
   employeeName: string;
-  employeeId: string;
+  employeeCode: string;
+  employeeType: string;
   designation: string;
-  department: string;
+  dateOfJoining: string;
+  baseLocation: string;
+  state: string;
+  panNo: string;
+  bankName: string;
+  accountNo: string;
+  ifscCode: string;
+  branchName: string;
   month: string;
   year: string;
   basicSalary: string;
   hra: string;
-  otherAllowances: string;
-  deductions: string;
+  specialAllowance: string;
+  tds: string;
+  professionalTax: string;
+  providentFund: string;
 }
 
 export const SalarySlipPDF = ({
@@ -151,115 +214,197 @@ export const SalarySlipPDF = ({
   companyAddress,
   logo,
   employeeName,
-  employeeId,
+  employeeCode,
+  employeeType,
   designation,
-  department,
+  dateOfJoining,
+  baseLocation,
+  state,
+  panNo,
+  bankName,
+  accountNo,
+  ifscCode,
+  branchName,
   month,
   year,
   basicSalary,
   hra,
-  otherAllowances,
-  deductions,
+  specialAllowance,
+  tds,
+  professionalTax,
+  providentFund,
 }: SalarySlipPDFProps) => {
-  const calculateGross = () => {
+  const calculateGrossEarning = () => {
     return (
       Number(basicSalary || 0) +
       Number(hra || 0) +
-      Number(otherAllowances || 0)
+      Number(specialAllowance || 0)
     );
   };
 
-  const calculateNet = () => {
-    return calculateGross() - Number(deductions || 0);
+  const calculateTotalDeductions = () => {
+    return (
+      Number(tds || 0) +
+      Number(professionalTax || 0) +
+      Number(providentFund || 0)
+    );
+  };
+
+  const calculateNetPay = () => {
+    return calculateGrossEarning() - calculateTotalDeductions();
   };
 
   return (
     <Document>
       <Page size="A4" style={styles.page}>
-        {/* Header */}
-        <View style={styles.header}>
-          <View style={styles.companyInfo}>
-            <Text style={styles.companyName}>{companyName || "Company Name"}</Text>
-            <Text style={styles.companyAddress}>{companyAddress || "Company Address"}</Text>
-          </View>
-          {logo && <Image src={logo} style={styles.logo} />}
-        </View>
-
-        {/* Title */}
-        <View style={styles.title}>
-          <Text style={styles.titleText}>SALARY SLIP</Text>
-          <Text style={styles.subtitle}>
-            For the month of {month || "Month"} {year || "Year"}
-          </Text>
-        </View>
-
-        {/* Employee Details */}
-        <View style={styles.employeeDetails}>
-          <View style={styles.detailRow}>
-            <View style={styles.detailColumn}>
-              <Text style={styles.detailLabel}>Employee Name</Text>
-              <Text style={styles.detailValue}>{employeeName || "Name"}</Text>
+        <View style={styles.border}>
+          {/* Header */}
+          <View style={styles.header}>
+            <View style={styles.logoSection}>
+              {logo && <Image src={logo} style={styles.logo} />}
             </View>
-            <View style={styles.detailColumn}>
-              <Text style={styles.detailLabel}>Employee ID</Text>
-              <Text style={styles.detailValue}>{employeeId || "ID"}</Text>
+            <View style={styles.headerRight}>
+              <Text style={styles.companyName}>{companyName || "Company Name"}</Text>
+              <Text style={styles.companyAddress}>Office Address: {companyAddress || "Company Address"}</Text>
+              <Text style={styles.title}>Salary Slip for {month || "Month"} {year || "Year"}</Text>
             </View>
           </View>
-          <View style={styles.detailRow}>
-            <View style={styles.detailColumn}>
-              <Text style={styles.detailLabel}>Designation</Text>
-              <Text style={styles.detailValue}>{designation || "Designation"}</Text>
+
+          {/* Employee Details */}
+          <View style={styles.detailsGrid}>
+            <View style={styles.detailRow}>
+              <View style={styles.detailCell}>
+                <Text style={styles.detailLabel}>Employee Name:</Text>
+                <Text style={styles.detailValue}>{employeeName || "Name"}</Text>
+              </View>
+              <View style={styles.detailCell}>
+                <Text style={styles.detailLabel}>Employee Type:</Text>
+                <Text style={styles.detailValue}>{employeeType || "Type"}</Text>
+              </View>
+              <View style={styles.detailCellLast}>
+                <Text style={styles.detailLabel}>Employee Code:</Text>
+                <Text style={styles.detailValue}>{employeeCode || "Code"}</Text>
+              </View>
             </View>
-            <View style={styles.detailColumn}>
-              <Text style={styles.detailLabel}>Department</Text>
-              <Text style={styles.detailValue}>{department || "Department"}</Text>
+
+            <View style={styles.detailRow}>
+              <View style={styles.detailCell}>
+                <Text style={styles.detailLabel}>Designation:</Text>
+                <Text style={styles.detailValue}>{designation || "Designation"}</Text>
+              </View>
+              <View style={styles.detailCellLast}>
+                <Text style={styles.detailLabel}>Date of Joining:</Text>
+                <Text style={styles.detailValue}>{dateOfJoining || "DD-MM-YYYY"}</Text>
+              </View>
+            </View>
+
+            <View style={styles.detailRow}>
+              <View style={styles.detailCell}>
+                <Text style={styles.detailLabel}>Base Location:</Text>
+                <Text style={styles.detailValue}>{baseLocation || "Location"}</Text>
+              </View>
+              <View style={styles.detailCell}>
+                <Text style={styles.detailLabel}>State:</Text>
+                <Text style={styles.detailValue}>{state || "State"}</Text>
+              </View>
+              <View style={styles.detailCellLast}>
+                <Text style={styles.detailLabel}>PAN No:</Text>
+                <Text style={styles.detailValue}>{panNo || "PAN"}</Text>
+              </View>
+            </View>
+
+            <View style={styles.detailRowLast}>
+              <View style={styles.detailCell}>
+                <Text style={styles.detailLabel}>Bank Name:</Text>
+                <Text style={styles.detailValue}>{bankName || "Bank"}</Text>
+              </View>
+              <View style={styles.detailCell}>
+                <Text style={styles.detailLabel}>Account No:</Text>
+                <Text style={styles.detailValue}>{accountNo || "Account"}</Text>
+              </View>
+              <View style={styles.detailCell}>
+                <Text style={styles.detailLabel}>IFSC Code:</Text>
+                <Text style={styles.detailValue}>{ifscCode || "IFSC"}</Text>
+              </View>
+              <View style={styles.detailCellLast}>
+                <Text style={styles.detailLabel}>Branch Name:</Text>
+                <Text style={styles.detailValue}>{branchName || ""}</Text>
+              </View>
             </View>
           </View>
-        </View>
 
-        {/* Earnings */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Earnings</Text>
-          <View style={styles.tableRow}>
-            <Text style={styles.tableLabel}>Basic Salary</Text>
-            <Text style={styles.tableValue}>₹{Number(basicSalary || 0).toLocaleString()}</Text>
-          </View>
-          <View style={styles.tableRow}>
-            <Text style={styles.tableLabel}>HRA</Text>
-            <Text style={styles.tableValue}>₹{Number(hra || 0).toLocaleString()}</Text>
-          </View>
-          <View style={styles.tableRow}>
-            <Text style={styles.tableLabel}>Other Allowances</Text>
-            <Text style={styles.tableValue}>₹{Number(otherAllowances || 0).toLocaleString()}</Text>
-          </View>
-          <View style={styles.totalRow}>
-            <Text style={styles.tableLabel}>Gross Salary</Text>
-            <Text style={styles.tableValue}>₹{calculateGross().toLocaleString()}</Text>
-          </View>
-        </View>
+          {/* Earnings and Deductions */}
+          <View style={styles.tableSection}>
+            {/* Earnings Column */}
+            <View style={styles.tableColumn}>
+              <View style={styles.tableHeader}>
+                <Text style={styles.tableHeaderText}>Earnings</Text>
+              </View>
+              <View style={styles.tableSubHeader}>
+                <Text style={styles.tableSubHeaderCell}>Components</Text>
+                <Text style={styles.tableSubHeaderCellLast}>Amount (Rs.)</Text>
+              </View>
+              <View style={styles.tableRow}>
+                <Text style={styles.tableCell}>Basic</Text>
+                <Text style={[styles.tableCellLast]}>{Number(basicSalary || 0).toLocaleString()}</Text>
+              </View>
+              <View style={styles.tableRow}>
+                <Text style={styles.tableCell}>HRA</Text>
+                <Text style={[styles.tableCellLast]}>{Number(hra || 0).toLocaleString()}</Text>
+              </View>
+              <View style={styles.tableRow}>
+                <Text style={styles.tableCell}>Special Allowance</Text>
+                <Text style={[styles.tableCellLast]}>{Number(specialAllowance || 0).toLocaleString()}</Text>
+              </View>
+              <View style={styles.totalRow}>
+                <Text style={styles.totalCell}>Gross Earning (A)</Text>
+                <Text style={styles.totalCellLast}>{calculateGrossEarning().toLocaleString()}</Text>
+              </View>
+              <View style={styles.totalRow}>
+                <Text style={styles.totalCell}>Net Pay (A - B)</Text>
+                <Text style={styles.totalCellLast}>{calculateNetPay().toLocaleString()}</Text>
+              </View>
+              <View style={styles.tableRowLast}>
+                <Text style={styles.totalCell}>Total Pay</Text>
+                <Text style={styles.totalCellLast}>{calculateNetPay().toLocaleString()}</Text>
+              </View>
+            </View>
 
-        {/* Deductions */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Deductions</Text>
-          <View style={styles.totalRow}>
-            <Text style={styles.tableLabel}>Total Deductions</Text>
-            <Text style={styles.tableValue}>₹{Number(deductions || 0).toLocaleString()}</Text>
+            {/* Deductions Column */}
+            <View style={styles.tableColumnLast}>
+              <View style={styles.tableHeader}>
+                <Text style={styles.tableHeaderText}>Deductions</Text>
+              </View>
+              <View style={styles.tableSubHeader}>
+                <Text style={styles.tableSubHeaderCell}>Common Deductions</Text>
+                <Text style={styles.tableSubHeaderCellLast}>Amount (Rs.)</Text>
+              </View>
+              <View style={styles.tableRow}>
+                <Text style={styles.tableCell}>Tax Deducted at Source (TDS)</Text>
+                <Text style={[styles.tableCellLast]}>{Number(tds || 0).toLocaleString()}</Text>
+              </View>
+              <View style={styles.tableRow}>
+                <Text style={styles.tableCell}>Professional Tax</Text>
+                <Text style={[styles.tableCellLast]}>{Number(professionalTax || 0).toLocaleString()}</Text>
+              </View>
+              <View style={styles.tableRow}>
+                <Text style={styles.tableCell}>Provident Fund (Employee)</Text>
+                <Text style={[styles.tableCellLast]}>{Number(providentFund || 0).toLocaleString()}</Text>
+              </View>
+              <View style={styles.totalRow}>
+                <Text style={styles.totalCell}>Total Deductions (B)</Text>
+                <Text style={styles.totalCellLast}>{calculateTotalDeductions().toLocaleString()}</Text>
+              </View>
+              <View style={styles.wordsCell}>
+                <Text>{convertNumberToWords(calculateNetPay())}</Text>
+              </View>
+            </View>
           </View>
-        </View>
 
-        {/* Net Salary */}
-        <View style={styles.netSalaryBox}>
-          <View style={styles.netSalaryRow}>
-            <Text style={styles.netSalaryLabel}>NET SALARY</Text>
-            <Text style={styles.netSalaryValue}>₹{calculateNet().toLocaleString()}</Text>
+          {/* Footer */}
+          <View style={styles.footer}>
+            <Text style={styles.footerText}>Note: This is a Computer-Generated Slip and does not require signature</Text>
           </View>
-        </View>
-
-        {/* Footer */}
-        <View style={styles.footer}>
-          <Text style={styles.footerText}>
-            This is a computer generated salary slip and does not require signature
-          </Text>
         </View>
       </Page>
     </Document>
