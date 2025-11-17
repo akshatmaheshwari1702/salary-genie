@@ -1,5 +1,27 @@
 import { Document, Page, Text, View, StyleSheet, Image } from "@react-pdf/renderer";
-import { convertNumberToWords } from "@/utils/numberToWords";
+
+// Simple number to words conversion for PDF
+const numberToWords = (num: number): string => {
+  if (num === 0) return 'Zero only';
+  if (isNaN(num) || num < 0) return 'Amount not available';
+  
+  try {
+    const crore = Math.floor(num / 10000000);
+    const lakh = Math.floor((num % 10000000) / 100000);
+    const thousand = Math.floor((num % 100000) / 1000);
+    const remainder = num % 1000;
+    
+    let result = '';
+    if (crore > 0) result += crore + ' Crore ';
+    if (lakh > 0) result += lakh + ' Lakh ';
+    if (thousand > 0) result += thousand + ' Thousand ';
+    if (remainder > 0) result += remainder;
+    
+    return result.trim() + ' only.';
+  } catch (error) {
+    return 'Amount in words not available';
+  }
+};
 
 const styles = StyleSheet.create({
   page: {
@@ -7,18 +29,21 @@ const styles = StyleSheet.create({
     fontFamily: "Helvetica",
   },
   border: {
-    border: 2,
+    borderWidth: 2,
+    borderStyle: "solid",
     borderColor: "#000000",
   },
   header: {
     flexDirection: "row",
-    borderBottom: 2,
-    borderColor: "#000000",
+    borderBottomWidth: 2,
+    borderBottomStyle: "solid",
+    borderBottomColor: "#000000",
   },
   logoSection: {
     width: 200,
-    borderRight: 2,
-    borderColor: "#000000",
+    borderRightWidth: 2,
+    borderRightStyle: "solid",
+    borderRightColor: "#000000",
     padding: 10,
     justifyContent: "center",
     alignItems: "center",
@@ -36,16 +61,18 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#DC2626",
     padding: 10,
-    borderBottom: 2,
-    borderColor: "#000000",
+    borderBottomWidth: 2,
+    borderBottomStyle: "solid",
+    borderBottomColor: "#000000",
   },
   companyAddress: {
     textAlign: "center",
     fontSize: 10,
     fontWeight: "bold",
     padding: 8,
-    borderBottom: 2,
-    borderColor: "#000000",
+    borderBottomWidth: 2,
+    borderBottomStyle: "solid",
+    borderBottomColor: "#000000",
   },
   title: {
     textAlign: "center",
@@ -54,21 +81,24 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   detailsGrid: {
-    borderBottom: 2,
-    borderColor: "#000000",
+    borderBottomWidth: 2,
+    borderBottomStyle: "solid",
+    borderBottomColor: "#000000",
   },
   detailRow: {
     flexDirection: "row",
-    borderBottom: 2,
-    borderColor: "#000000",
+    borderBottomWidth: 2,
+    borderBottomStyle: "solid",
+    borderBottomColor: "#000000",
   },
   detailRowLast: {
     flexDirection: "row",
   },
   detailCell: {
     padding: 8,
-    borderRight: 2,
-    borderColor: "#000000",
+    borderRightWidth: 2,
+    borderRightStyle: "solid",
+    borderRightColor: "#000000",
     flex: 1,
   },
   detailCellLast: {
@@ -88,8 +118,9 @@ const styles = StyleSheet.create({
   },
   tableColumn: {
     flex: 1,
-    borderRight: 2,
-    borderColor: "#000000",
+    borderRightWidth: 2,
+    borderRightStyle: "solid",
+    borderRightColor: "#000000",
   },
   tableColumnLast: {
     flex: 1,
@@ -97,9 +128,9 @@ const styles = StyleSheet.create({
   tableHeader: {
     backgroundColor: "#F3F4F6",
     padding: 8,
-    borderBottom: 2,
-    borderColor: "#000000",
-    textAlign: "center",
+    borderBottomWidth: 2,
+    borderBottomStyle: "solid",
+    borderBottomColor: "#000000",
   },
   tableHeaderText: {
     fontSize: 11,
@@ -107,25 +138,26 @@ const styles = StyleSheet.create({
   },
   tableSubHeader: {
     flexDirection: "row",
-    borderBottom: 2,
-    borderColor: "#000000",
+    borderBottomWidth: 2,
+    borderBottomStyle: "solid",
+    borderBottomColor: "#000000",
   },
   tableSubHeaderCell: {
     flex: 1,
     padding: 8,
-    borderRight: 2,
-    borderColor: "#000000",
-    textAlign: "center",
+    borderRightWidth: 2,
+    borderRightStyle: "solid",
+    borderRightColor: "#000000",
   },
   tableSubHeaderCellLast: {
     flex: 1,
     padding: 8,
-    textAlign: "center",
   },
   tableRow: {
     flexDirection: "row",
-    borderBottom: 2,
-    borderColor: "#000000",
+    borderBottomWidth: 2,
+    borderBottomStyle: "solid",
+    borderBottomColor: "#000000",
   },
   tableRowLast: {
     flexDirection: "row",
@@ -133,8 +165,9 @@ const styles = StyleSheet.create({
   tableCell: {
     flex: 1,
     padding: 8,
-    borderRight: 2,
-    borderColor: "#000000",
+    borderRightWidth: 2,
+    borderRightStyle: "solid",
+    borderRightColor: "#000000",
     fontSize: 9,
   },
   tableCellLast: {
@@ -146,14 +179,16 @@ const styles = StyleSheet.create({
   totalRow: {
     backgroundColor: "#F3F4F6",
     flexDirection: "row",
-    borderBottom: 2,
-    borderColor: "#000000",
+    borderBottomWidth: 2,
+    borderBottomStyle: "solid",
+    borderBottomColor: "#000000",
   },
   totalCell: {
     flex: 1,
     padding: 8,
-    borderRight: 2,
-    borderColor: "#000000",
+    borderRightWidth: 2,
+    borderRightStyle: "solid",
+    borderRightColor: "#000000",
     fontSize: 9,
     fontWeight: "bold",
   },
@@ -168,11 +203,13 @@ const styles = StyleSheet.create({
     padding: 10,
     fontSize: 9,
     textAlign: "center",
-    borderBottom: 2,
-    borderColor: "#000000",
+    borderBottomWidth: 2,
+    borderBottomStyle: "solid",
+    borderBottomColor: "#000000",
   },
   footer: {
-    borderTop: 4,
+    borderTopWidth: 4,
+    borderTopStyle: "solid",
     borderTopColor: "#2563EB",
     padding: 10,
     textAlign: "center",
@@ -209,31 +246,32 @@ interface SalarySlipPDFProps {
   providentFund: string;
 }
 
-export const SalarySlipPDF = ({
-  companyName,
-  companyAddress,
-  logo,
-  employeeName,
-  employeeCode,
-  employeeType,
-  designation,
-  dateOfJoining,
-  baseLocation,
-  state,
-  panNo,
-  bankName,
-  accountNo,
-  ifscCode,
-  branchName,
-  month,
-  year,
-  basicSalary,
-  hra,
-  specialAllowance,
-  tds,
-  professionalTax,
-  providentFund,
-}: SalarySlipPDFProps) => {
+export const SalarySlipPDF = (props: SalarySlipPDFProps) => {
+  const {
+    logo,
+    employeeName,
+    employeeCode,
+    employeeType,
+    designation,
+    dateOfJoining,
+    baseLocation,
+    state,
+    panNo,
+    bankName,
+    accountNo,
+    ifscCode,
+    branchName,
+    month,
+    year,
+    basicSalary,
+    hra,
+    specialAllowance,
+    tds,
+    professionalTax,
+    providentFund,
+  } = props;
+  const companyName = "Oliver Publications LLP";
+  const companyAddress = "Plot No 21 Sector D 2 Industrial Area Sawer Road Indore 452015";
   const calculateGrossEarning = () => {
     return (
       Number(basicSalary || 0) +
@@ -261,11 +299,22 @@ export const SalarySlipPDF = ({
           {/* Header */}
           <View style={styles.header}>
             <View style={styles.logoSection}>
-              {logo && <Image src={logo} style={styles.logo} />}
+              {logo && logo.length > 0 ? (
+                <Image 
+                  src={logo} 
+                  style={styles.logo}
+                />
+              ) : (
+                <View style={styles.logo}>
+                  <Text style={{ fontSize: 12, textAlign: 'center' }}>
+                    Company Logo
+                  </Text>
+                </View>
+              )}
             </View>
             <View style={styles.headerRight}>
-              <Text style={styles.companyName}>{companyName || "Company Name"}</Text>
-              <Text style={styles.companyAddress}>Office Address: {companyAddress || "Company Address"}</Text>
+              <Text style={styles.companyName}>{companyName}</Text>
+              <Text style={styles.companyAddress}>Office Address: {companyAddress}</Text>
               <Text style={styles.title}>Salary Slip for {month || "Month"} {year || "Year"}</Text>
             </View>
           </View>
@@ -338,11 +387,15 @@ export const SalarySlipPDF = ({
             {/* Earnings Column */}
             <View style={styles.tableColumn}>
               <View style={styles.tableHeader}>
-                <Text style={styles.tableHeaderText}>Earnings</Text>
+                <Text style={[styles.tableHeaderText, { textAlign: 'center' }]}>Earnings</Text>
               </View>
               <View style={styles.tableSubHeader}>
-                <Text style={styles.tableSubHeaderCell}>Components</Text>
-                <Text style={styles.tableSubHeaderCellLast}>Amount (Rs.)</Text>
+                <View style={styles.tableSubHeaderCell}>
+                  <Text style={{ textAlign: 'center' }}>Components</Text>
+                </View>
+                <View style={styles.tableSubHeaderCellLast}>
+                  <Text style={{ textAlign: 'center' }}>Amount (Rs.)</Text>
+                </View>
               </View>
               <View style={styles.tableRow}>
                 <Text style={styles.tableCell}>Basic</Text>
@@ -373,11 +426,15 @@ export const SalarySlipPDF = ({
             {/* Deductions Column */}
             <View style={styles.tableColumnLast}>
               <View style={styles.tableHeader}>
-                <Text style={styles.tableHeaderText}>Deductions</Text>
+                <Text style={[styles.tableHeaderText, { textAlign: 'center' }]}>Deductions</Text>
               </View>
               <View style={styles.tableSubHeader}>
-                <Text style={styles.tableSubHeaderCell}>Common Deductions</Text>
-                <Text style={styles.tableSubHeaderCellLast}>Amount (Rs.)</Text>
+                <View style={styles.tableSubHeaderCell}>
+                  <Text style={{ textAlign: 'center' }}>Common Deductions</Text>
+                </View>
+                <View style={styles.tableSubHeaderCellLast}>
+                  <Text style={{ textAlign: 'center' }}>Amount (Rs.)</Text>
+                </View>
               </View>
               <View style={styles.tableRow}>
                 <Text style={styles.tableCell}>Tax Deducted at Source (TDS)</Text>
@@ -396,7 +453,9 @@ export const SalarySlipPDF = ({
                 <Text style={styles.totalCellLast}>{calculateTotalDeductions().toLocaleString()}</Text>
               </View>
               <View style={styles.wordsCell}>
-                <Text>{convertNumberToWords(calculateNetPay())}</Text>
+                <Text>
+                  {numberToWords(calculateNetPay())}
+                </Text>
               </View>
             </View>
           </View>

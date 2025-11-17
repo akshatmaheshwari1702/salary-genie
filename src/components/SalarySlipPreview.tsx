@@ -1,10 +1,9 @@
+
 import { Card } from "@/components/ui/card";
 import { convertNumberToWords } from "@/utils/numberToWords";
+import { OLIVER_LOGO_BASE64 } from "@/assets/oliverLogoBase64";
 
 interface SalarySlipPreviewProps {
-  companyName: string;
-  companyAddress: string;
-  logo: string;
   employeeName: string;
   employeeCode: string;
   employeeType: string;
@@ -27,31 +26,31 @@ interface SalarySlipPreviewProps {
   providentFund: string;
 }
 
-export const SalarySlipPreview = ({
-  companyName,
-  companyAddress,
-  logo,
-  employeeName,
-  employeeCode,
-  employeeType,
-  designation,
-  dateOfJoining,
-  baseLocation,
-  state,
-  panNo,
-  bankName,
-  accountNo,
-  ifscCode,
-  branchName,
-  month,
-  year,
-  basicSalary,
-  hra,
-  specialAllowance,
-  tds,
-  professionalTax,
-  providentFund,
-}: SalarySlipPreviewProps) => {
+export const SalarySlipPreview = (props: Omit<SalarySlipPreviewProps, 'logo'>) => {
+  const {
+    employeeName,
+    employeeCode,
+    employeeType,
+    designation,
+    dateOfJoining,
+    baseLocation,
+    state,
+    panNo,
+    bankName,
+    accountNo,
+    ifscCode,
+    branchName,
+    month,
+    year,
+    basicSalary,
+    hra,
+    specialAllowance,
+    tds,
+    professionalTax,
+    providentFund,
+  } = props;
+  const companyName = "Oliver Publications LLP";
+  const companyAddress = "Plot No 21 Sector D 2 Industrial Area Sawer Road Indore 452015";
   const calculateGrossEarning = () => {
     return (
       Number(basicSalary || 0) +
@@ -78,20 +77,14 @@ export const SalarySlipPreview = ({
         {/* Header */}
         <div className="grid grid-cols-[200px_1fr] border-2 border-black">
           <div className="border-r-2 border-black p-4 flex items-center justify-center">
-            {logo ? (
-              <img src={logo} alt="Company Logo" className="max-w-full max-h-32 object-contain" />
-            ) : (
-              <div className="w-32 h-32 bg-muted flex items-center justify-center text-xs text-muted-foreground">
-                Logo
-              </div>
-            )}
+            <img src={OLIVER_LOGO_BASE64} alt="Company Logo" className="max-w-full max-h-32 object-contain" />
           </div>
           <div className="flex flex-col">
             <div className="border-b-2 border-black p-3 text-center">
-              <h1 className="text-2xl font-bold text-red-600">{companyName || "Company Name"}</h1>
+              <h1 className="text-2xl font-bold text-red-600">{companyName}</h1>
             </div>
             <div className="border-b-2 border-black p-2 text-center text-sm">
-              <p className="font-semibold">Office Address: {companyAddress || "Company Address"}</p>
+              <p className="font-semibold">Office Address: {companyAddress}</p>
             </div>
             <div className="p-3 text-center">
               <h2 className="text-xl font-bold">Salary Slip for {month || "Month"} {year || "Year"}</h2>

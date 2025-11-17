@@ -4,13 +4,20 @@ import { CompanyDetailsForm } from "@/components/CompanyDetailsForm";
 import { EmployeeDetailsForm } from "@/components/EmployeeDetailsForm";
 import { SalaryDetailsForm } from "@/components/SalaryDetailsForm";
 import { SalarySlipPreview } from "@/components/SalarySlipPreview";
-import { FileDown } from "lucide-react";
+import { FileDown, TestTube } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { pdf } from "@react-pdf/renderer";
 import { SalarySlipPDF } from "@/components/SalarySlipPDF";
+import { TestSalarySlipPDF } from "@/components/TestSalarySlipPDF";
+import { SimpleSalarySlipPDF } from "@/components/SimpleSalarySlipPDF";
+import { MinimalSalarySlipPDF } from "@/components/MinimalSalarySlipPDF";
+import { OLIVER_LOGO_BASE64 } from "@/assets/oliverLogoBase64";
+import { downloadBlob, generateSalarySlipFilename } from "@/utils/downloadHelpers";
+import { debugPDFGeneration } from "@/utils/debugPDF";
 
 const Index = () => {
   const { toast } = useToast();
+  const [isGenerating, setIsGenerating] = useState(false);
   
   // Company details
   const [companyName, setCompanyName] = useState("");
@@ -41,13 +48,168 @@ const Index = () => {
   const [professionalTax, setProfessionalTax] = useState("");
   const [providentFund, setProvidentFund] = useState("");
 
-  const handleGeneratePDF = async () => {
+  const handleTestPDF = async () => {
+    if (isGenerating) return;
+    
     try {
+      setIsGenerating(true);
+      
+      // Debug information
+      debugPDFGeneration();
+      
+      toast({
+        title: "Testing PDF Generation",
+        description: "Generating a simple test PDF...",
+      });
+
+      const blob = await pdf(
+        <TestSalarySlipPDF
+          employeeName="Test Employee"
+          month="November"
+          year="2024"
+        />
+      ).toBlob();
+
+      downloadBlob(blob, "test-salary-slip.pdf");
+
+      toast({
+        title: "Test PDF Generated",
+        description: "Simple test PDF created successfully!",
+      });
+    } catch (error) {
+      console.error("Test PDF Generation Error:", error);
+      toast({
+        title: "Test Failed",
+        description: `Error: ${error instanceof Error ? error.message : "Unknown error"}`,
+        variant: "destructive",
+      });
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  const handleTestSimplePDF = async () => {
+    if (isGenerating) return;
+    
+    try {
+      setIsGenerating(true);
+      
+      console.log("=== Simple PDF Test Debug ===");
+      console.log("Form data:", {
+        employeeName: employeeName || "Test Employee",
+        employeeCode: employeeCode || "EMP001",
+        designation: designation || "Software Developer",
+        month: month || "November",
+        year: year || "2024",
+        basicSalary: basicSalary || "50000",
+        hra: hra || "15000",
+        specialAllowance: specialAllowance || "10000",
+        tds: tds || "5000",
+        professionalTax: professionalTax || "200",
+        providentFund: providentFund || "6000"
+      });
+      
+      toast({
+        title: "Testing Simple Salary PDF",
+        description: "Generating a simple salary slip PDF...",
+      });
+
+      console.log("Creating PDF component...");
+      const pdfComponent = (
+        <MinimalSalarySlipPDF
+          employeeName={employeeName || "Test Employee"}
+          employeeCode={employeeCode || "EMP001"}
+          designation={designation || "Software Developer"}
+          month={month || "November"}
+          year={year || "2024"}
+          basicSalary={basicSalary || "50000"}
+          hra={hra || "15000"}
+          specialAllowance={specialAllowance || "10000"}
+          tds={tds || "5000"}
+          professionalTax={professionalTax || "200"}
+          providentFund={providentFund || "6000"}
+        />
+      );
+      
+      console.log("Converting to PDF blob...");
+      const blob = await pdf(pdfComponent).toBlob();
+      console.log("PDF blob created successfully, size:", blob.size);
+
+      const fileName = generateSalarySlipFilename(
+        employeeName || "Test Employee", 
+        month || "November", 
+        year || "2024", 
+        employeeCode
+      );
+      console.log("Generated filename:", fileName);
+      
+      console.log("Starting download...");
+      downloadBlob(blob, `minimal-${fileName}`);
+
+      toast({
+        title: "Simple PDF Generated",
+        description: "Simple salary slip PDF created successfully!",
+      });
+      console.log("=== Simple PDF Test Complete ===");
+    } catch (error) {
+      console.error("=== Simple PDF Generation Error ===");
+      console.error("Error details:", error);
+      console.error("Error stack:", error instanceof Error ? error.stack : "No stack trace");
+      toast({
+        title: "Simple PDF Test Failed",
+        description: `Error: ${error instanceof Error ? error.message : "Unknown error"}`,
+        variant: "destructive",
+      });
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  const handleGeneratePDF = async () => {
+    if (isGenerating) return;
+    
+    try {
+      // Validate required fields
+      if (!employeeName.trim()) {
+        toast({
+          title: "Validation Error",
+          description: "Employee name is required to generate PDF.",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      if (!month.trim() || !year.trim()) {
+        toast({
+          title: "Validation Error",
+          description: "Month and year are required to generate PDF.",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      setIsGenerating(true);
+
+      // Show loading toast
+      toast({
+        title: "Generating PDF",
+        description: "Please wait while we create your salary slip...",
+      });
+
+      console.log("=== Full PDF Generation Debug ===");
+      console.log("Logo check:");
+      console.log("- Logo exists:", !!OLIVER_LOGO_BASE64);
+      console.log("- Logo length:", OLIVER_LOGO_BASE64.length);
+      console.log("- Logo starts with data:image:", OLIVER_LOGO_BASE64.startsWith("data:image"));
+      console.log("- Logo preview:", OLIVER_LOGO_BASE64.substring(0, 50) + "...");
+      console.log("Attempting full version with logo...");
+      
+      // Always try the full version - don't use fallback for now
       const blob = await pdf(
         <SalarySlipPDF
-          companyName={companyName}
-          companyAddress={companyAddress}
-          logo={logo}
+          companyName="Oliver Publications LLP"
+          companyAddress="Plot No 21 Sector D 2 Industrial Area Sawer Road Indore 452015"
+          logo={OLIVER_LOGO_BASE64}
           employeeName={employeeName}
           employeeCode={employeeCode}
           employeeType={employeeType}
@@ -70,24 +232,25 @@ const Index = () => {
           providentFund={providentFund}
         />
       ).toBlob();
+      console.log("✅ Full version succeeded, blob size:", blob.size);
 
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = `salary-slip-${employeeCode || "employee"}-${month}-${year}.pdf`;
-      link.click();
-      URL.revokeObjectURL(url);
+      // Generate filename and download
+      const fileName = generateSalarySlipFilename(employeeName, month, year, employeeCode);
+      downloadBlob(blob, fileName);
 
       toast({
-        title: "PDF Generated",
-        description: "Salary slip has been downloaded successfully.",
+        title: "PDF Generated Successfully",
+        description: `Salary slip for ${employeeName} has been downloaded.`,
       });
     } catch (error) {
+      console.error("PDF Generation Error:", error);
       toast({
         title: "Error",
-        description: "Failed to generate PDF. Please try again.",
+        description: "Failed to generate PDF. Please check your data and try again.",
         variant: "destructive",
       });
+    } finally {
+      setIsGenerating(false);
     }
   };
 
@@ -106,14 +269,7 @@ const Index = () => {
         <div className="grid lg:grid-cols-2 gap-8">
           {/* Forms Section */}
           <div className="space-y-6">
-            <CompanyDetailsForm
-              companyName={companyName}
-              setCompanyName={setCompanyName}
-              companyAddress={companyAddress}
-              setCompanyAddress={setCompanyAddress}
-              logo={logo}
-              setLogo={setLogo}
-            />
+            <CompanyDetailsForm />
             
             <EmployeeDetailsForm
               employeeName={employeeName}
@@ -161,14 +317,41 @@ const Index = () => {
               setProvidentFund={setProvidentFund}
             />
 
-            <Button 
-              onClick={handleGeneratePDF} 
-              className="w-full"
-              size="lg"
-            >
-              <FileDown className="mr-2 h-5 w-5" />
-              Generate PDF
-            </Button>
+            <div className="space-y-3">
+              <div className="grid grid-cols-2 gap-2 mb-2">
+                <Button 
+                  onClick={handleTestPDF} 
+                  className="w-full"
+                  size="sm"
+                  variant="outline"
+                  disabled={isGenerating}
+                >
+                  <TestTube className="mr-1 h-3 w-3" />
+                  Basic Test
+                </Button>
+                
+                <Button 
+                  onClick={handleTestSimplePDF} 
+                  className="w-full"
+                  size="sm"
+                  variant="outline"
+                  disabled={isGenerating}
+                >
+                  <TestTube className="mr-1 h-3 w-3" />
+                  Minimal Test
+                </Button>
+              </div>
+
+              <Button 
+                onClick={handleGeneratePDF} 
+                className="w-full"
+                size="lg"
+                disabled={isGenerating}
+              >
+                <FileDown className="mr-2 h-5 w-5" />
+                {isGenerating ? "Generating PDF..." : "Generate PDF"}
+              </Button>
+            </div>
           </div>
 
           {/* Preview Section */}
@@ -176,9 +359,6 @@ const Index = () => {
             <h2 className="text-xl font-semibold mb-4 text-foreground">Preview</h2>
             <div className="overflow-auto">
               <SalarySlipPreview
-                companyName={companyName}
-                companyAddress={companyAddress}
-                logo={logo}
                 employeeName={employeeName}
                 employeeCode={employeeCode}
                 employeeType={employeeType}

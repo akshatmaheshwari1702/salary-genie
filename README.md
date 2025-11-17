@@ -1,3 +1,6 @@
+# Company Name: Oliver Publications LLP
+# Office Address: Plot No 21 Sector D 2 Industrial Area Sawer Road Indore 452015
+
 # Welcome to your Lovable project
 
 ## Project info
