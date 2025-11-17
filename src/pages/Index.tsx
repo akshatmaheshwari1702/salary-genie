@@ -4,16 +4,12 @@ import { CompanyDetailsForm } from "@/components/CompanyDetailsForm";
 import { EmployeeDetailsForm } from "@/components/EmployeeDetailsForm";
 import { SalaryDetailsForm } from "@/components/SalaryDetailsForm";
 import { SalarySlipPreview } from "@/components/SalarySlipPreview";
-import { FileDown, TestTube } from "lucide-react";
+import { FileDown } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { pdf } from "@react-pdf/renderer";
 import { SalarySlipPDF } from "@/components/SalarySlipPDF";
-import { TestSalarySlipPDF } from "@/components/TestSalarySlipPDF";
-import { SimpleSalarySlipPDF } from "@/components/SimpleSalarySlipPDF";
-import { MinimalSalarySlipPDF } from "@/components/MinimalSalarySlipPDF";
 import { OLIVER_LOGO_BASE64 } from "@/assets/oliverLogoBase64";
 import { downloadBlob, generateSalarySlipFilename } from "@/utils/downloadHelpers";
-import { debugPDFGeneration } from "@/utils/debugPDF";
 
 const Index = () => {
   const { toast } = useToast();
@@ -47,123 +43,6 @@ const Index = () => {
   const [tds, setTds] = useState("");
   const [professionalTax, setProfessionalTax] = useState("");
   const [providentFund, setProvidentFund] = useState("");
-
-  const handleTestPDF = async () => {
-    if (isGenerating) return;
-    
-    try {
-      setIsGenerating(true);
-      
-      // Debug information
-      debugPDFGeneration();
-      
-      toast({
-        title: "Testing PDF Generation",
-        description: "Generating a simple test PDF...",
-      });
-
-      const blob = await pdf(
-        <TestSalarySlipPDF
-          employeeName="Test Employee"
-          month="November"
-          year="2024"
-        />
-      ).toBlob();
-
-      downloadBlob(blob, "test-salary-slip.pdf");
-
-      toast({
-        title: "Test PDF Generated",
-        description: "Simple test PDF created successfully!",
-      });
-    } catch (error) {
-      console.error("Test PDF Generation Error:", error);
-      toast({
-        title: "Test Failed",
-        description: `Error: ${error instanceof Error ? error.message : "Unknown error"}`,
-        variant: "destructive",
-      });
-    } finally {
-      setIsGenerating(false);
-    }
-  };
-
-  const handleTestSimplePDF = async () => {
-    if (isGenerating) return;
-    
-    try {
-      setIsGenerating(true);
-      
-      console.log("=== Simple PDF Test Debug ===");
-      console.log("Form data:", {
-        employeeName: employeeName || "Test Employee",
-        employeeCode: employeeCode || "EMP001",
-        designation: designation || "Software Developer",
-        month: month || "November",
-        year: year || "2024",
-        basicSalary: basicSalary || "50000",
-        hra: hra || "15000",
-        specialAllowance: specialAllowance || "10000",
-        tds: tds || "5000",
-        professionalTax: professionalTax || "200",
-        providentFund: providentFund || "6000"
-      });
-      
-      toast({
-        title: "Testing Simple Salary PDF",
-        description: "Generating a simple salary slip PDF...",
-      });
-
-      console.log("Creating PDF component...");
-      const pdfComponent = (
-        <MinimalSalarySlipPDF
-          employeeName={employeeName || "Test Employee"}
-          employeeCode={employeeCode || "EMP001"}
-          designation={designation || "Software Developer"}
-          month={month || "November"}
-          year={year || "2024"}
-          basicSalary={basicSalary || "50000"}
-          hra={hra || "15000"}
-          specialAllowance={specialAllowance || "10000"}
-          tds={tds || "5000"}
-          professionalTax={professionalTax || "200"}
-          providentFund={providentFund || "6000"}
-        />
-      );
-      
-      console.log("Converting to PDF blob...");
-      const blob = await pdf(pdfComponent).toBlob();
-      console.log("PDF blob created successfully, size:", blob.size);
-
-      const fileName = generateSalarySlipFilename(
-        employeeName || "Test Employee", 
-        month || "November", 
-        year || "2024", 
-        employeeCode
-      );
-      console.log("Generated filename:", fileName);
-      
-      console.log("Starting download...");
-      downloadBlob(blob, `minimal-${fileName}`);
-
-      toast({
-        title: "Simple PDF Generated",
-        description: "Simple salary slip PDF created successfully!",
-      });
-      console.log("=== Simple PDF Test Complete ===");
-    } catch (error) {
-      console.error("=== Simple PDF Generation Error ===");
-      console.error("Error details:", error);
-      console.error("Error stack:", error instanceof Error ? error.stack : "No stack trace");
-      toast({
-        title: "Simple PDF Test Failed",
-        description: `Error: ${error instanceof Error ? error.message : "Unknown error"}`,
-        variant: "destructive",
-      });
-    } finally {
-      setIsGenerating(false);
-    }
-  };
 
   const handleGeneratePDF = async () => {
     if (isGenerating) return;
@@ -318,30 +197,6 @@ const Index = () => {
             />
 
             <div className="space-y-3">
-              <div className="grid grid-cols-2 gap-2 mb-2">
-                <Button 
-                  onClick={handleTestPDF} 
-                  className="w-full"
-                  size="sm"
-                  variant="outline"
-                  disabled={isGenerating}
-                >
-                  <TestTube className="mr-1 h-3 w-3" />
-                  Basic Test
-                </Button>
-                
-                <Button 
-                  onClick={handleTestSimplePDF} 
-                  className="w-full"
-                  size="sm"
-                  variant="outline"
-                  disabled={isGenerating}
-                >
-                  <TestTube className="mr-1 h-3 w-3" />
-                  Minimal Test
-                </Button>
-              </div>
-
               <Button 
                 onClick={handleGeneratePDF} 
                 className="w-full"
