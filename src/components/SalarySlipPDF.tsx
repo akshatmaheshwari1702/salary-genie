@@ -1,25 +1,32 @@
-import { Document, Page, Text, View, StyleSheet, Image } from "@react-pdf/renderer";
+import {
+  Document,
+  Page,
+  Text,
+  View,
+  StyleSheet,
+  Image,
+} from "@react-pdf/renderer";
 
 // Simple number to words conversion for PDF
 const numberToWords = (num: number): string => {
-  if (num === 0) return 'Zero only';
-  if (isNaN(num) || num < 0) return 'Amount not available';
-  
+  if (num === 0) return "Zero only";
+  if (isNaN(num) || num < 0) return "Amount not available";
+
   try {
     const crore = Math.floor(num / 10000000);
     const lakh = Math.floor((num % 10000000) / 100000);
     const thousand = Math.floor((num % 100000) / 1000);
     const remainder = num % 1000;
-    
-    let result = '';
-    if (crore > 0) result += crore + ' Crore ';
-    if (lakh > 0) result += lakh + ' Lakh ';
-    if (thousand > 0) result += thousand + ' Thousand ';
+
+    let result = "";
+    if (crore > 0) result += crore + " Crore ";
+    if (lakh > 0) result += lakh + " Lakh ";
+    if (thousand > 0) result += thousand + " Thousand ";
     if (remainder > 0) result += remainder;
-    
-    return result.trim() + ' only.';
+
+    return result.trim() + " only.";
   } catch (error) {
-    return 'Amount in words not available';
+    return "Amount in words not available";
   }
 };
 
@@ -27,6 +34,12 @@ const styles = StyleSheet.create({
   page: {
     backgroundColor: "#ffffff",
     fontFamily: "Helvetica",
+  },
+  tableSubHeaderText: {
+    fontSize: 10, 
+    lineHeight: 1.35, 
+    textAlign: "center",
+    fontWeight: "bold",
   },
   border: {
     borderWidth: 2,
@@ -271,7 +284,8 @@ export const SalarySlipPDF = (props: SalarySlipPDFProps) => {
     providentFund,
   } = props;
   const companyName = "Oliver Publications LLP";
-  const companyAddress = "Plot No 21 Sector D 2 Industrial Area Sawer Road Indore 452015";
+  const companyAddress =
+    "Plot No 21 Sector D 2 Industrial Area Sawer Road Indore 452015";
   const calculateGrossEarning = () => {
     return (
       Number(basicSalary || 0) +
@@ -300,13 +314,10 @@ export const SalarySlipPDF = (props: SalarySlipPDFProps) => {
           <View style={styles.header}>
             <View style={styles.logoSection}>
               {logo && logo.length > 0 ? (
-                <Image 
-                  src={logo} 
-                  style={styles.logo}
-                />
+                <Image src={logo} style={styles.logo} />
               ) : (
                 <View style={styles.logo}>
-                  <Text style={{ fontSize: 12, textAlign: 'center' }}>
+                  <Text style={{ fontSize: 12, textAlign: "center" }}>
                     Company Logo
                   </Text>
                 </View>
@@ -314,8 +325,12 @@ export const SalarySlipPDF = (props: SalarySlipPDFProps) => {
             </View>
             <View style={styles.headerRight}>
               <Text style={styles.companyName}>{companyName}</Text>
-              <Text style={styles.companyAddress}>Office Address: {companyAddress}</Text>
-              <Text style={styles.title}>Salary Slip for {month || "Month"} {year || "Year"}</Text>
+              <Text style={styles.companyAddress}>
+                Office Address: {companyAddress}
+              </Text>
+              <Text style={styles.title}>
+                Salary Slip for {month || "Month"} {year || "Year"}
+              </Text>
             </View>
           </View>
 
@@ -339,18 +354,24 @@ export const SalarySlipPDF = (props: SalarySlipPDFProps) => {
             <View style={styles.detailRow}>
               <View style={styles.detailCell}>
                 <Text style={styles.detailLabel}>Designation:</Text>
-                <Text style={styles.detailValue}>{designation || "Designation"}</Text>
+                <Text style={styles.detailValue}>
+                  {designation || "Designation"}
+                </Text>
               </View>
               <View style={styles.detailCellLast}>
                 <Text style={styles.detailLabel}>Date of Joining:</Text>
-                <Text style={styles.detailValue}>{dateOfJoining || "DD-MM-YYYY"}</Text>
+                <Text style={styles.detailValue}>
+                  {dateOfJoining || "DD-MM-YYYY"}
+                </Text>
               </View>
             </View>
 
             <View style={styles.detailRow}>
               <View style={styles.detailCell}>
                 <Text style={styles.detailLabel}>Base Location:</Text>
-                <Text style={styles.detailValue}>{baseLocation || "Location"}</Text>
+                <Text style={styles.detailValue}>
+                  {baseLocation || "Location"}
+                </Text>
               </View>
               <View style={styles.detailCell}>
                 <Text style={styles.detailLabel}>State:</Text>
@@ -387,82 +408,111 @@ export const SalarySlipPDF = (props: SalarySlipPDFProps) => {
             {/* Earnings Column */}
             <View style={styles.tableColumn}>
               <View style={styles.tableHeader}>
-                <Text style={[styles.tableHeaderText, { textAlign: 'center' }]}>Earnings</Text>
+                <Text style={[styles.tableHeaderText, { textAlign: "center" }]}>
+                  Earnings
+                </Text>
               </View>
               <View style={styles.tableSubHeader}>
                 <View style={styles.tableSubHeaderCell}>
-                  <Text style={{ textAlign: 'center' }}>Components</Text>
+                  <Text style={styles.tableSubHeaderText}>Components</Text>
                 </View>
                 <View style={styles.tableSubHeaderCellLast}>
-                  <Text style={{ textAlign: 'center' }}>Amount (Rs.)</Text>
+                  <Text style={styles.tableSubHeaderText}>Amount (Rs.)</Text>
                 </View>
               </View>
               <View style={styles.tableRow}>
                 <Text style={styles.tableCell}>Basic</Text>
-                <Text style={[styles.tableCellLast]}>{Number(basicSalary || 0).toLocaleString()}</Text>
+                <Text style={[styles.tableCellLast]}>
+                  {Number(basicSalary || 0).toLocaleString()}
+                </Text>
               </View>
               <View style={styles.tableRow}>
                 <Text style={styles.tableCell}>HRA</Text>
-                <Text style={[styles.tableCellLast]}>{Number(hra || 0).toLocaleString()}</Text>
+                <Text style={[styles.tableCellLast]}>
+                  {Number(hra || 0).toLocaleString()}
+                </Text>
               </View>
               <View style={styles.tableRow}>
                 <Text style={styles.tableCell}>Special Allowance</Text>
-                <Text style={[styles.tableCellLast]}>{Number(specialAllowance || 0).toLocaleString()}</Text>
+                <Text style={[styles.tableCellLast]}>
+                  {Number(specialAllowance || 0).toLocaleString()}
+                </Text>
               </View>
               <View style={styles.totalRow}>
                 <Text style={styles.totalCell}>Gross Earning (A)</Text>
-                <Text style={styles.totalCellLast}>{calculateGrossEarning().toLocaleString()}</Text>
+                <Text style={styles.totalCellLast}>
+                  {calculateGrossEarning().toLocaleString()}
+                </Text>
               </View>
               <View style={styles.totalRow}>
                 <Text style={styles.totalCell}>Net Pay (A - B)</Text>
-                <Text style={styles.totalCellLast}>{calculateNetPay().toLocaleString()}</Text>
+                <Text style={styles.totalCellLast}>
+                  {calculateNetPay().toLocaleString()}
+                </Text>
               </View>
               <View style={styles.tableRowLast}>
                 <Text style={styles.totalCell}>Total Pay</Text>
-                <Text style={styles.totalCellLast}>{calculateNetPay().toLocaleString()}</Text>
+                <Text style={styles.totalCellLast}>
+                  {calculateNetPay().toLocaleString()}
+                </Text>
               </View>
             </View>
 
             {/* Deductions Column */}
             <View style={styles.tableColumnLast}>
               <View style={styles.tableHeader}>
-                <Text style={[styles.tableHeaderText, { textAlign: 'center' }]}>Deductions</Text>
+                <Text style={[styles.tableHeaderText, { textAlign: "center" }]}>
+                  Deductions
+                </Text>
               </View>
               <View style={styles.tableSubHeader}>
                 <View style={styles.tableSubHeaderCell}>
-                  <Text style={{ textAlign: 'center' }}>Common Deductions</Text>
+                  <Text style={styles.tableSubHeaderText}>
+                    Common Deductions
+                  </Text>
                 </View>
                 <View style={styles.tableSubHeaderCellLast}>
-                  <Text style={{ textAlign: 'center' }}>Amount (Rs.)</Text>
+                  <Text style={styles.tableSubHeaderText}>Amount (Rs.)</Text>
                 </View>
               </View>
               <View style={styles.tableRow}>
-                <Text style={styles.tableCell}>Tax Deducted at Source (TDS)</Text>
-                <Text style={[styles.tableCellLast]}>{Number(tds || 0).toLocaleString()}</Text>
+                <Text style={styles.tableCell}>
+                  Tax Deducted at Source (TDS)
+                </Text>
+                <Text style={[styles.tableCellLast]}>
+                  {Number(tds || 0).toLocaleString()}
+                </Text>
               </View>
               <View style={styles.tableRow}>
                 <Text style={styles.tableCell}>Professional Tax</Text>
-                <Text style={[styles.tableCellLast]}>{Number(professionalTax || 0).toLocaleString()}</Text>
+                <Text style={[styles.tableCellLast]}>
+                  {Number(professionalTax || 0).toLocaleString()}
+                </Text>
               </View>
               <View style={styles.tableRow}>
                 <Text style={styles.tableCell}>Provident Fund (Employee)</Text>
-                <Text style={[styles.tableCellLast]}>{Number(providentFund || 0).toLocaleString()}</Text>
+                <Text style={[styles.tableCellLast]}>
+                  {Number(providentFund || 0).toLocaleString()}
+                </Text>
               </View>
               <View style={styles.totalRow}>
                 <Text style={styles.totalCell}>Total Deductions (B)</Text>
-                <Text style={styles.totalCellLast}>{calculateTotalDeductions().toLocaleString()}</Text>
+                <Text style={styles.totalCellLast}>
+                  {calculateTotalDeductions().toLocaleString()}
+                </Text>
               </View>
               <View style={styles.wordsCell}>
-                <Text>
-                  {numberToWords(calculateNetPay())}
-                </Text>
+                <Text>{calculateNetPay()}</Text>
               </View>
             </View>
           </View>
 
           {/* Footer */}
           <View style={styles.footer}>
-            <Text style={styles.footerText}>Note: This is a Computer-Generated Slip and does not require signature</Text>
+            <Text style={styles.footerText}>
+              Note: This is a Computer-Generated Slip and does not require
+              signature
+            </Text>
           </View>
         </View>
       </Page>

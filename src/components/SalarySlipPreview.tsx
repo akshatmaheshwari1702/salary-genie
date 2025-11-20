@@ -71,6 +71,8 @@ export const SalarySlipPreview = (props: Omit<SalarySlipPreviewProps, 'logo'>) =
     return calculateGrossEarning() - calculateTotalDeductions();
   };
 
+  console.log(calculateNetPay())
+
   return (
     <Card className="w-full max-w-4xl mx-auto overflow-hidden" id="salary-slip">
       <div className="bg-white text-black">
@@ -225,7 +227,7 @@ export const SalarySlipPreview = (props: Omit<SalarySlipPreviewProps, 'logo'>) =
               <div className="p-2 text-right font-bold text-sm">{calculateTotalDeductions().toLocaleString()}</div>
             </div>
             <div className="p-3 border-b-2 border-black">
-              <p className="text-sm text-center">{convertNumberToWords(calculateNetPay())}</p>
+              <p className="text-sm text-center">{calculateNetPay()}</p>
             </div>
           </div>
         </div>
