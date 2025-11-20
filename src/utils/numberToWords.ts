@@ -15,10 +15,14 @@ function convertLessThanThousand(num: number): string {
 export function convertNumberToWords(num: number): string {
   if (num === 0) return 'Zero only';
   
-  const crore = Math.floor(num / 10000000);
-  const lakh = Math.floor((num % 10000000) / 100000);
-  const thousand = Math.floor((num % 100000) / 1000);
-  const remainder = num % 1000;
+  // Handle negative numbers
+  const isNegative = num < 0;
+  const absoluteNum = Math.abs(num);
+  
+  const crore = Math.floor(absoluteNum / 10000000);
+  const lakh = Math.floor((absoluteNum % 10000000) / 100000);
+  const thousand = Math.floor((absoluteNum % 100000) / 1000);
+  const remainder = absoluteNum % 1000;
   
   let result = '';
   
@@ -38,5 +42,6 @@ export function convertNumberToWords(num: number): string {
     result += convertLessThanThousand(remainder);
   }
   
-  return result.trim() + ' only.';
+  // Add "Minus" prefix for negative numbers
+  return (isNegative ? 'Minus ' : '') + result.trim() + ' only.';
 }
