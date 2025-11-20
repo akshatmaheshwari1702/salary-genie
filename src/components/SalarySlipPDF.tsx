@@ -502,7 +502,7 @@ export const SalarySlipPDF = (props: SalarySlipPDFProps) => {
                 </Text>
               </View>
               <View style={styles.wordsCell}>
-                <Text>{calculateNetPay()}</Text>
+                <Text>{calculateNetPay().toLocaleString()}</Text>
               </View>
             </View>
           </View>

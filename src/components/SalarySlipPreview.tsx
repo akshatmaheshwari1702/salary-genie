@@ -227,7 +227,7 @@ export const SalarySlipPreview = (props: Omit<SalarySlipPreviewProps, 'logo'>) =
               <div className="p-2 text-right font-bold text-sm">{calculateTotalDeductions().toLocaleString()}</div>
             </div>
             <div className="p-3 border-b-2 border-black">
-              <p className="text-sm text-center">{calculateNetPay()}</p>
+              <p className="text-sm text-center">{calculateNetPay().toLocaleString()}</p>
             </div>
           </div>
         </div>
