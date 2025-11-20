@@ -77,7 +77,7 @@ export const SalarySlipPreview = (props: Omit<SalarySlipPreviewProps, 'logo'>) =
     <Card className="w-full max-w-4xl mx-auto overflow-hidden" id="salary-slip">
       <div className="bg-white text-black">
         {/* Header */}
-        <div className="grid grid-cols-[200px_1fr] border-2 border-black">
+        <div className="grid grid-cols-[200px_1fr] border-2 border-black ">
           <div className="border-r-2 border-black p-4 flex items-center justify-center">
             <img src={OLIVER_LOGO_BASE64} alt="Company Logo" className="max-w-full max-h-32 object-contain" />
           </div>
@@ -226,8 +226,8 @@ export const SalarySlipPreview = (props: Omit<SalarySlipPreviewProps, 'logo'>) =
               <div className="p-2 border-r-2 border-black font-bold text-sm">Total Deductions (B)</div>
               <div className="p-2 text-right font-bold text-sm">{calculateTotalDeductions().toLocaleString()}</div>
             </div>
-            <div className="p-3 border-b-2 border-black">
-              <p className="text-sm text-center">{calculateNetPay().toLocaleString()}</p>
+            <div className="p-3 ">
+              <p className="text-sm text-center">{convertNumberToWords(calculateNetPay())}</p>
             </div>
           </div>
         </div>
