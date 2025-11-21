@@ -74,8 +74,8 @@ export const SalarySlipPreview = (props: Omit<SalarySlipPreviewProps, 'logo'>) =
   console.log(calculateNetPay())
 
   return (
-    <Card className="w-full max-w-4xl mx-auto overflow-hidden" id="salary-slip">
-      <div className="bg-white text-black">
+    <Card className="w-full max-w-4xl mx-auto  overflow-hidden" id="salary-slip">
+      <div className="bg-white text-black ">
         {/* Header */}
         <div className="grid grid-cols-[200px_1fr] border-2 border-black ">
           <div className="border-r-2 border-black p-4 flex items-center justify-center">
@@ -165,7 +165,7 @@ export const SalarySlipPreview = (props: Omit<SalarySlipPreviewProps, 'logo'>) =
         </div>
 
         {/* Earnings and Deductions Table */}
-        <div className="grid grid-cols-2 border-x-2 border-b-2 border-black">
+        <div className="grid grid-cols-2 border-x-2 border-black border-b-transparent">
           {/* Earnings */}
           <div className="border-r-2 border-black">
             <div className="bg-gray-100 p-2 border-b-2 border-black text-center">
@@ -195,8 +195,8 @@ export const SalarySlipPreview = (props: Omit<SalarySlipPreviewProps, 'logo'>) =
               <div className="p-2 border-r-2 border-black font-bold text-sm">Net Pay (A - B)</div>
               <div className="p-2 text-right font-bold text-sm">{calculateNetPay().toLocaleString()}</div>
             </div>
-            <div className="grid grid-cols-2">
-              <div className="p-2 border-r-2 border-black font-bold text-sm">Total Pay</div>
+            <div className="grid grid-cols-2 border-b-2 border-black">
+              <div className="p-2 border-r-2 border-black  font-bold text-sm">Total Pay</div>
               <div className="p-2 text-right font-bold text-sm">{calculateNetPay().toLocaleString()}</div>
             </div>
           </div>

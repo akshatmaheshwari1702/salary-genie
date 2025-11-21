@@ -19,12 +19,23 @@ export function convertNumberToWords(num: number): string {
   const isNegative = num < 0;
   const absoluteNum = Math.abs(num);
   
-  const crore = Math.floor(absoluteNum / 10000000);
+  // Indian numbering system: Ones, Thousand, Lakh, Crore, Arab, Kharab
+  const kharab = Math.floor(absoluteNum / 1000000000000); // 1 Kharab = 100 Arab
+  const arab = Math.floor((absoluteNum % 1000000000000) / 10000000000); // 1 Arab = 100 Crore
+  const crore = Math.floor((absoluteNum % 10000000000) / 10000000);
   const lakh = Math.floor((absoluteNum % 10000000) / 100000);
   const thousand = Math.floor((absoluteNum % 100000) / 1000);
   const remainder = absoluteNum % 1000;
   
   let result = '';
+  
+  if (kharab > 0) {
+    result += convertLessThanThousand(kharab) + ' Kharab ';
+  }
+  
+  if (arab > 0) {
+    result += convertLessThanThousand(arab) + ' Arab ';
+  }
   
   if (crore > 0) {
     result += convertLessThanThousand(crore) + ' Crore ';

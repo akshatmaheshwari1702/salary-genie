@@ -10,34 +10,97 @@ import {
 // Simple number to words conversion for PDF
 const numberToWords = (num: number): string => {
   if (num === 0) return "Zero only";
-  if (isNaN(num) || num < 0) return "Amount not available";
+
+  // Handle negative numbers
+  const isNegative = num < 0;
+  const absoluteNum = Math.abs(num);
+
+  if (isNaN(absoluteNum)) return "Amount not available";
 
   try {
-    const crore = Math.floor(num / 10000000);
-    const lakh = Math.floor((num % 10000000) / 100000);
-    const thousand = Math.floor((num % 100000) / 1000);
-    const remainder = num % 1000;
+    const ones = [
+      "",
+      "One",
+      "Two",
+      "Three",
+      "Four",
+      "Five",
+      "Six",
+      "Seven",
+      "Eight",
+      "Nine",
+    ];
+    const tens = [
+      "",
+      "",
+      "Twenty",
+      "Thirty",
+      "Forty",
+      "Fifty",
+      "Sixty",
+      "Seventy",
+      "Eighty",
+      "Ninety",
+    ];
+    const teens = [
+      "Ten",
+      "Eleven",
+      "Twelve",
+      "Thirteen",
+      "Fourteen",
+      "Fifteen",
+      "Sixteen",
+      "Seventeen",
+      "Eighteen",
+      "Nineteen",
+    ];
+
+    const convertLessThanThousand = (n: number): string => {
+      if (n === 0) return "";
+      if (n < 10) return ones[n];
+      if (n < 20) return teens[n - 10];
+      if (n < 100)
+        return (
+          tens[Math.floor(n / 10)] + (n % 10 !== 0 ? " " + ones[n % 10] : "")
+        );
+      return (
+        ones[Math.floor(n / 100)] +
+        " Hundred" +
+        (n % 100 !== 0 ? " " + convertLessThanThousand(n % 100) : "")
+      );
+    };
+
+    // Indian numbering system: Ones, Thousand, Lakh, Crore, Arab, Kharab
+    const kharab = Math.floor(absoluteNum / 1000000000000); // 1 Kharab = 100 Arab
+    const arab = Math.floor((absoluteNum % 1000000000000) / 10000000000); // 1 Arab = 100 Crore
+    const crore = Math.floor((absoluteNum % 10000000000) / 10000000);
+    const lakh = Math.floor((absoluteNum % 10000000) / 100000);
+    const thousand = Math.floor((absoluteNum % 100000) / 1000);
+    const remainder = absoluteNum % 1000;
 
     let result = "";
-    if (crore > 0) result += crore + " Crore ";
-    if (lakh > 0) result += lakh + " Lakh ";
-    if (thousand > 0) result += thousand + " Thousand ";
-    if (remainder > 0) result += remainder;
 
-    return result.trim() + " only.";
+    if (kharab > 0) result += convertLessThanThousand(kharab) + " Kharab ";
+    if (arab > 0) result += convertLessThanThousand(arab) + " Arab ";
+    if (crore > 0) result += convertLessThanThousand(crore) + " Crore ";
+    if (lakh > 0) result += convertLessThanThousand(lakh) + " Lakh ";
+    if (thousand > 0)
+      result += convertLessThanThousand(thousand) + " Thousand ";
+    if (remainder > 0) result += convertLessThanThousand(remainder);
+
+    return (isNegative ? "Minus " : "") + result.trim() + " only.";
   } catch (error) {
     return "Amount in words not available";
   }
 };
-
 const styles = StyleSheet.create({
   page: {
     backgroundColor: "#ffffff",
     fontFamily: "Helvetica",
   },
   tableSubHeaderText: {
-    fontSize: 10, 
-    lineHeight: 1.35, 
+    fontSize: 10,
+    lineHeight: 1.35,
     textAlign: "center",
     fontWeight: "bold",
   },
@@ -502,7 +565,7 @@ export const SalarySlipPDF = (props: SalarySlipPDFProps) => {
                 </Text>
               </View>
               <View style={styles.wordsCell}>
-                <Text>{calculateNetPay().toLocaleString()}</Text>
+                <Text>{numberToWords(calculateNetPay())}</Text>
               </View>
             </View>
           </View>
